@@ -9,6 +9,20 @@
         <small class="text-muted">Created {{ $lead->lead_creation_date?->format('d M Y') ?? '—' }}</small>
     </div>
     <div class="d-flex gap-2">
+        @if(!$lead->locked_until || $lead->locked_until->isPast())
+        <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#lockModal">
+            <i class="bi bi-lock"></i> Lock
+        </button>
+        @else
+            @if(auth()->user()->isSuperAdmin() || auth()->user()->isSalesManager() || auth()->id() === $lead->locked_by)
+            <form action="{{ route('leads.unlock', $lead) }}" method="POST" class="d-inline">
+                @csrf @method('POST')
+                <button class="btn btn-outline-success btn-sm">
+                    <i class="bi bi-unlock"></i> Unlock
+                </button>
+            </form>
+            @endif
+        @endif
         <a href="{{ route('leads.edit', $lead) }}" class="btn btn-outline-primary btn-sm">
             <i class="bi bi-pencil"></i> Edit
         </a>
@@ -19,6 +33,16 @@
         @endif
     </div>
 </div>
+
+@if($lead->locked_until && $lead->locked_until->isFuture())
+<div class="alert alert-warning mb-3">
+    <i class="bi bi-lock-fill me-2"></i> <strong>This lead is locked.</strong> 
+    Locked by <strong>{{ $lead->lockedBy?->name ?? 'System' }}</strong> 
+    from <strong>{{ $lead->locked_from?->format('d M Y, h:i A') }}</strong> 
+    to <strong>{{ $lead->locked_until->format('d M Y, h:i A') }}</strong>.
+    During this period, new leads cannot be created with this mobile number.
+</div>
+@endif
 
 <!-- Pipeline Progress -->
 @php
@@ -193,6 +217,30 @@ $currentIdx = array_search($lead->status, $stages);
     </div>
 </div>
 @endif
+
+<!-- Lock Modal -->
+<div class="modal fade" id="lockModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('leads.lock', $lead) }}" class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Lock Lead</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Locking this lead will prevent others from creating a new lead with the same mobile number.</p>
+                <div class="mb-3">
+                    <label class="form-label">Lock Duration (Days) <span class="text-danger">*</span></label>
+                    <input type="number" name="lock_days" class="form-control" min="1" max="365" value="30" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">Lock Lead</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @push('scripts')
 <script>

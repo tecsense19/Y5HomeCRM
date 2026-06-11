@@ -163,7 +163,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-primary">View</a>
+                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
                         </td>
                     </tr>
                     @empty

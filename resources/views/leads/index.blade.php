@@ -7,9 +7,14 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span>All Leads</span>
-        <a href="{{ route('leads.create') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-lg"></i> New Lead
-        </a>
+        <div>
+            <a href="{{ route('leads.import') }}" class="btn btn-secondary btn-sm me-2">
+                <i class="bi bi-upload"></i> Import Leads
+            </a>
+            <a href="{{ route('leads.create') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> New Lead
+            </a>
+        </div>
     </div>
 
     <!-- Filters -->
@@ -60,7 +65,7 @@
                         <th>Status</th>
                         <th>Assigned To</th>
                         <th>Follow-up</th>
-                        <th>Actions</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,8 +91,29 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
-                            <a href="{{ route('leads.edit', $lead) }}" class="btn btn-xs btn-outline-secondary btn-sm">Edit</a>
+                            <div class="d-flex gap-1 justify-content-left">
+                                <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('leads.edit', $lead) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                                
+                                @if(!$lead->locked_until || $lead->locked_until->isPast())
+                                <button type="button" class="btn btn-xs btn-outline-warning btn-sm" title="Lock Lead" onclick="openLockModal({{ $lead->id }})">
+                                    <i class="bi bi-lock"></i>
+                                </button>
+                                @else
+                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isSalesManager() || auth()->id() === $lead->locked_by)
+                                    <form action="{{ route('leads.unlock', $lead) }}" method="POST" class="d-inline">
+                                        @csrf @method('POST')
+                                        <button class="btn btn-xs btn-outline-success btn-sm" title="Unlock Lead">
+                                            <i class="bi bi-unlock"></i>
+                                        </button>
+                                    </form>
+                                    @else
+                                    <button class="btn btn-xs btn-secondary btn-sm" disabled title="Locked by {{ $lead->lockedBy?->name }}">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </button>
+                                    @endif
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -101,4 +127,37 @@
     <div class="card-footer">{{ $leads->links() }}</div>
     @endif
 </div>
+
+<!-- Lock Modal -->
+<div class="modal fade" id="lockModalIndex" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="" id="lockFormIndex" class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Lock Lead</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Locking this lead will prevent others from creating a new lead with the same mobile number.</p>
+                <div class="mb-3">
+                    <label class="form-label">Lock Duration (Days) <span class="text-danger">*</span></label>
+                    <input type="number" name="lock_days" class="form-control" min="1" max="365" value="30" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">Lock Lead</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function openLockModal(leadId) {
+    document.getElementById('lockFormIndex').action = "{{ route('leads.index') }}/" + leadId + "/lock";
+    new bootstrap.Modal(document.getElementById('lockModalIndex')).show();
+}
+</script>
+@endpush
 @endsection

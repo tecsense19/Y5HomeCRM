@@ -24,7 +24,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             'file'               => 'required|file|max:25600|mimes:pdf,docx,xlsx,jpg,jpeg,png',
-            'category'           => 'required|string',
+            'category'           => 'nullable|string',
             'documentable_type'  => 'required|string',
             'documentable_id'    => 'required|integer',
             'notes'              => 'nullable|string',
@@ -58,6 +58,62 @@ class DocumentController extends Controller
         }
 
         return redirect($redirectUrl)->with('success', 'Document uploaded successfully.');
+    }
+
+    public function edit(Document $document)
+    {
+        abort_unless(Document::forUser(Auth::user())->where('id', $document->id)->exists(), 403);
+        return view('documents.edit', compact('document'));
+    }
+
+    public function update(Request $request, Document $document)
+    {
+        abort_unless(Document::forUser(Auth::user())->where('id', $document->id)->exists(), 403);
+
+        $request->validate([
+            'category'           => 'nullable|string',
+            'documentable_type'  => 'required|string',
+            'documentable_id'    => 'required|integer',
+            'notes'              => 'nullable|string',
+            'file'               => 'nullable|file|max:25600|mimes:pdf,docx,xlsx,jpg,jpeg,png',
+        ]);
+
+        if ($request->hasFile('file')) {
+            // Delete old file
+            if (Storage::disk('local')->exists($document->file_path)) {
+                Storage::disk('local')->delete($document->file_path);
+            }
+            
+            // Store new file
+            $file = $request->file('file');
+            $path = $file->store('documents/' . $request->category, 'local');
+            
+            $document->update([
+                'file_name'     => basename($path),
+                'original_name' => $file->getClientOriginalName(),
+                'file_path'     => $path,
+                'file_size'     => $file->getSize(),
+                'mime_type'     => $file->getMimeType(),
+            ]);
+        } elseif ($request->category !== $document->category) {
+            // Move file to new category folder
+            $newPath = 'documents/' . $request->category . '/' . basename($document->file_path);
+            if (Storage::disk('local')->exists($document->file_path)) {
+                Storage::disk('local')->move($document->file_path, $newPath);
+                $document->update([
+                    'file_path' => $newPath,
+                ]);
+            }
+        }
+
+        $document->update([
+            'documentable_type' => $request->documentable_type,
+            'documentable_id'   => $request->documentable_id,
+            'category'          => $request->category,
+            'notes'             => $request->notes,
+        ]);
+
+        return redirect()->route('documents.index')->with('success', 'Document updated successfully.');
     }
 
     public function show(Document $document)

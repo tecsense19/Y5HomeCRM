@@ -1,74 +1,95 @@
 @extends('layouts.app')
-@section('title', 'Architect Details')
+@section('title', $architect->name)
 @section('page-title', 'Architect Details')
 
 @section('content')
-<div class="row">
-    <div class="col-md-4">
-        <!-- Architect Profile Card -->
-        <div class="card mb-4">
-            <div class="card-body text-center">
-                <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle mb-3" style="width: 72px; height: 72px;">
-                    <i class="bi bi-vector-pen fs-1"></i>
-                </div>
-                <h4 class="card-title mb-1">{{ $architect->name }}</h4>
-                <p class="text-muted small mb-3">{{ $architect->firm_name ?: 'Independent Architect' }}</p>
-                <div>
-                    @if($architect->is_active)
-                        <span class="badge bg-success">Active Partner</span>
-                    @else
-                        <span class="badge bg-secondary">Inactive Partner</span>
-                    @endif
-                </div>
-            </div>
-            <hr class="my-0">
-            <div class="card-body">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-telephone text-primary"></i>
-                    <div>
-                        <div class="text-muted small">Mobile Number</div>
-                        <div>{{ $architect->mobile_number }}</div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-envelope text-primary"></i>
-                    <div>
-                        <div class="text-muted small">Email Address</div>
-                        <div>{{ $architect->email ?: '–' }}</div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-geo-alt text-primary"></i>
-                    <div>
-                        <div class="text-muted small">City</div>
-                        <div>{{ $architect->city ?: '–' }}</div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-calendar-event text-primary"></i>
-                    <div>
-                        <div class="text-muted small">Created Date</div>
-                        <div>{{ $architect->created_at->format('d M Y') }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-light d-flex justify-content-between">
-                <a href="{{ route('architects.edit', $architect) }}" class="btn btn-sm btn-outline-secondary">Edit Details</a>
-                <a href="{{ route('architects.index') }}" class="btn btn-sm btn-link text-decoration-none text-muted">Back to List</a>
-            </div>
-        </div>
-    </div>
-
+<div class="row justify-content-center">
     <div class="col-md-8">
-        <!-- Architect Activity / Leads Info -->
-        <div class="card">
-            <div class="card-header">
-                <span>Architect Projects / Referred Leads</span>
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Architect: {{ $architect->name }}</span>
+                <div>
+                    <a href="{{ route('architects.index') }}" class="btn btn-outline-secondary btn-sm me-1">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                    <a href="{{ route('architects.edit', $architect) }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil"></i> Edit Architect
+                    </a>
+                </div>
             </div>
-            <div class="card-body py-5 text-center text-muted">
-                <i class="bi bi-info-circle fs-3 mb-2 d-block"></i>
-                <p class="mb-0">There are no leads linked directly to this Architect yet.</p>
-                <small>Future updates will support automatic referral link tracking.</small>
+
+            <div class="card-body">
+                <div class="text-center py-3">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+                        {{ strtoupper(substr($architect->name, 0, 1)) }}
+                    </div>
+                    <h5 class="fw-bold mb-1">{{ $architect->name }}</h5>
+                    <span class="badge bg-secondary mb-2">{{ $architect->firm_name ?: 'Independent Architect' }}</span>
+                </div>
+
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="w-30 bg-light">Firm Name</th>
+                                <td>{{ $architect->firm_name ?: '–' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Mobile Number</th>
+                                <td><a href="tel:{{ $architect->mobile_number }}" class="text-decoration-none">{{ $architect->mobile_number }}</a></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Email Address</th>
+                                <td>
+                                    @if($architect->email)
+                                        <a href="mailto:{{ $architect->email }}" class="text-decoration-none">{{ $architect->email }}</a>
+                                    @else –
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">City</th>
+                                <td>{{ $architect->city ?: '–' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Status</th>
+                                <td>
+                                    @if($architect->is_active)
+                                        <span class="badge bg-success">Active Partner</span>
+                                    @else
+                                        <span class="badge bg-secondary">Inactive Partner</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 border-top pt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold mb-0"><i class="bi bi-person-lines-fill me-1"></i> Referred Leads</h6>
+                    </div>
+                    <div class="table-responsive border rounded">
+                        <table class="table mb-0 align-middle small text-center">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted py-4">There are no leads linked directly to this Architect yet.<br><small>Future updates will support automatic referral link tracking.</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between align-items-center border-top pt-3">
+                    <span class="text-muted small">Added On: {{ $architect->created_at->format('d M Y') }}</span>
+                    <form action="{{ route('architects.destroy', $architect) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this architect permanently?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete Architect
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

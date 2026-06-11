@@ -61,13 +61,13 @@
                         </td>
                         <td class="small text-muted">{{ $c->created_at->format('d M Y') }}</td>
                         <td>
-                            <div class="d-flex gap-1">
-                                <a href="{{ route('customers.show', $c) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
-                                <a href="{{ route('customers.edit', $c) }}" class="btn btn-xs btn-outline-secondary btn-sm">Edit</a>
+                            <div class="d-flex gap-1 justify-content-left">
+                                <a href="{{ route('customers.show', $c) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('customers.edit', $c) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
                                 <form action="{{ route('customers.destroy', $c) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this customer?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-xs btn-outline-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
                                 </form>
                             </div>
                         </td>

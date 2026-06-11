@@ -18,7 +18,7 @@
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">
-            <thead><tr><th>Visit ID</th><th>Customer</th><th>Visit Date</th><th>Visited By</th><th>Location</th><th>Est. Value</th><th></th></tr></thead>
+            <thead><tr><th>Visit ID</th><th>Customer</th><th>Visit Date</th><th>Visited By</th><th>Location</th><th>Est. Value</th><th>Action</th></tr></thead>
             <tbody>
             @forelse($visits as $v)
             <tr>
@@ -28,7 +28,16 @@
                 <td>{{ $v->visitedBy?->name ?? '–' }}</td>
                 <td>{{ $v->location ?? '–' }}</td>
                 <td>{{ $v->estimated_project_value ? '₹'.number_format($v->estimated_project_value) : '–' }}</td>
-                <td><a href="{{ route('site-visits.show', $v) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                <td>
+                    <div class="d-flex gap-1 justify-content-left">
+                        <a href="{{ route('site-visits.show', $v) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{{ route('site-visits.edit', $v) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <form action="{{ route('site-visits.destroy', $v) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this site visit?');" class="d-inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             @empty
             <tr><td colspan="7" class="text-center text-muted py-4">No site visits.</td></tr>

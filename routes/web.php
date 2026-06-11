@@ -37,14 +37,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Leads
+    Route::get('/leads/import/template', [LeadController::class, 'downloadTemplate'])->name('leads.import.template');
+    Route::get('/leads/import', [LeadController::class, 'showImport'])->name('leads.import');
+    Route::post('/leads/import', [LeadController::class, 'import'])->name('leads.import.post');
     Route::resource('leads', LeadController::class);
     Route::patch('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('leads.status');
     Route::post('/leads/{lead}/assign', [LeadController::class, 'assign'])->name('leads.assign');
+    Route::post('/leads/{lead}/lock', [LeadController::class, 'lock'])->name('leads.lock');
+    Route::post('/leads/{lead}/unlock', [LeadController::class, 'unlock'])->name('leads.unlock');
 
     // Customers
     Route::resource('customers', CustomerController::class);
 
     // Experience Centers
+    Route::get('/experience-centers/import/template', [ExperienceCenterController::class, 'downloadTemplate'])->name('experience-centers.import.template');
+    Route::get('/experience-centers/import', [ExperienceCenterController::class, 'showImport'])->name('experience-centers.import');
+    Route::post('/experience-centers/import', [ExperienceCenterController::class, 'import'])->name('experience-centers.import.post');
     Route::resource('experience-centers', ExperienceCenterController::class);
     Route::patch('/experience-centers/{center}/status', [ExperienceCenterController::class, 'updateStatus'])->name('experience-centers.status');
 
@@ -62,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('site-visits', SiteVisitController::class);
 
     // Documents
-    Route::resource('documents', DocumentController::class)->except(['edit', 'update']);
+    Route::resource('documents', DocumentController::class);
     Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
 
     // Reports

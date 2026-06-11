@@ -1,7 +1,7 @@
 # Y5Home CRM & Experience Center Management System
 
 **Phase 1 – MVP Release**  
-Built with Laravel 10 | Bootstrap 5 | MySQL
+Built with Laravel 12 | Bootstrap 5 | MySQL
 
 ---
 

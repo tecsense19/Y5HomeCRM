@@ -10,7 +10,17 @@
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">
-            <thead><tr><th>Opp #</th><th>Customer</th><th>Project</th><th>Value</th><th>Stage</th><th>Probability</th><th>Close Date</th><th></th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Opp #</th>
+                    <th>Customer</th>
+                    <th>Project</th>
+                    <th>Value</th>
+                    <th>Stage</th>
+                    <th>Probability</th>
+                    <th>Close Date</th>
+                    <th>Action</th>
+                </tr></thead>
             <tbody>
             @forelse($opportunities as $o)
             <tr>
@@ -26,7 +36,16 @@
                     <small class="text-muted">{{ $o->probability }}%</small>
                 </td>
                 <td class="small text-muted">{{ $o->expected_closing_date?->format('d M Y') ?? '–' }}</td>
-                <td><a href="{{ route('opportunities.show', $o) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                <td>
+                    <div class="d-flex gap-1 justify-content-left">
+                        <a href="{{ route('opportunities.show', $o) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{{ route('opportunities.edit', $o) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <form action="{{ route('opportunities.destroy', $o) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this opportunity?');" class="d-inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             @empty
             <tr><td colspan="8" class="text-center text-muted py-4">No opportunities.</td></tr>

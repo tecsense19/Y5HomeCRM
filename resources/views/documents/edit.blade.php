@@ -1,21 +1,22 @@
 @extends('layouts.app')
-@section('title', 'Upload Document')
-@section('page-title', 'Upload Document')
+@section('title', 'Edit Document')
+@section('page-title', 'Edit Document')
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Upload New Document</span>
+                <span>Edit Document: {{ $document->original_name }}</span>
                 <a href="{{ route('documents.index') }}" class="btn btn-outline-secondary btn-sm">
                     <i class="bi bi-arrow-left"></i> Back to List
                 </a>
             </div>
 
             <div class="card-body">
-                <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('documents.update', $document) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -28,20 +29,35 @@
                     @endif
 
                     <div class="mb-3">
-                        <label class="form-label" for="file">Choose File <span class="text-danger">*</span></label>
-                        <input type="file" name="file" id="file" class="form-control" required>
-                        <div class="form-text">Supported formats: PDF, DOCX, XLSX, JPG, PNG (Max size: 25 MB).</div>
+                        <label class="form-label d-block">Current Document</label>
+                        <div class="d-flex align-items-center gap-3 p-3 border rounded bg-light mb-3">
+                            <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+                            <div class="flex-grow-1">
+                                <strong class="d-block">{{ $document->original_name }}</strong>
+                                <small class="text-muted">{{ number_format($document->file_size / 1024 / 1024, 2) }} MB</small>
+                            </div>
+                            <a href="{{ route('documents.download', $document) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        </div>
+
+                        <label class="form-label" for="file">Upload New File to Replace Current (Optional)</label>
+                        <input type="file" name="file" id="file" class="form-control">
+                        <div class="form-text text-danger mt-1">
+                            <i class="bi bi-exclamation-triangle-fill"></i> Uploading a new file will permanently delete and replace the current file. 
+                            Supported formats: PDF, DOCX, XLSX, JPG, PNG (Max size: 25 MB).
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="category">Category</label>
                         <select name="category" id="category" class="form-select">
                             <option value="">-- Select Category --</option>
-                            <option value="site_photos">Site Photos</option>
-                            <option value="quotation_pdf">Quotation Pdf</option>
-                            <option value="boq_pdf">Boq Pdf</option>
-                            <option value="drawings">Drawings</option>
-                            <option value="agreements">Agreements</option>
+                            <option value="site_photos" {{ $document->category === 'site_photos' ? 'selected' : '' }}>Site Photos</option>
+                            <option value="quotation_pdf" {{ $document->category === 'quotation_pdf' ? 'selected' : '' }}>Quotation Pdf</option>
+                            <option value="boq_pdf" {{ $document->category === 'boq_pdf' ? 'selected' : '' }}>Boq Pdf</option>
+                            <option value="drawings" {{ $document->category === 'drawings' ? 'selected' : '' }}>Drawings</option>
+                            <option value="agreements" {{ $document->category === 'agreements' ? 'selected' : '' }}>Agreements</option>
                         </select>
                     </div>
 
@@ -51,22 +67,18 @@
                         $opportunities = \App\Models\Opportunity::orderBy('opportunity_number')->get();
                         $quotations = \App\Models\Quotation::orderBy('quotation_number')->get();
 
-                        $presetModule = request()->query('module');
-                        $presetId = request()->query('id');
+                        $presetModule = null;
+                        $presetId = $document->documentable_id;
 
-                        $selectedType = '';
+                        $selectedType = $document->documentable_type;
                         $targetBlock = '';
-                        if ($presetModule === 'customer') {
-                            $selectedType = 'App\Models\Customer';
+                        if ($selectedType === 'App\Models\Customer') {
                             $targetBlock = 'customer_block';
-                        } elseif ($presetModule === 'lead') {
-                            $selectedType = 'App\Models\Lead';
+                        } elseif ($selectedType === 'App\Models\Lead') {
                             $targetBlock = 'lead_block';
-                        } elseif ($presetModule === 'opportunity') {
-                            $selectedType = 'App\Models\Opportunity';
+                        } elseif ($selectedType === 'App\Models\Opportunity') {
                             $targetBlock = 'opp_block';
-                        } elseif ($presetModule === 'quotation') {
-                            $selectedType = 'App\Models\Quotation';
+                        } elseif ($selectedType === 'App\Models\Quotation') {
                             $targetBlock = 'quot_block';
                         }
                     @endphp
@@ -132,12 +144,12 @@
 
                     <div class="mb-3">
                         <label class="form-label" for="notes">Notes</label>
-                        <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Add any details or description..."></textarea>
+                        <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Add any details or description...">{{ $document->notes }}</textarea>
                     </div>
 
                     <div class="text-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-cloud-arrow-up"></i> Upload
+                            <i class="bi bi-save"></i> Update Document
                         </button>
                     </div>
                 </form>

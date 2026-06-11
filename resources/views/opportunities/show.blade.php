@@ -150,7 +150,14 @@
                                             <span class="badge bg-{{ $cls }}">{{ ucfirst($q->status) }}</span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('quotations.show', $q) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
+                                            <div class="d-flex gap-1 justify-content-left">
+                                                <a href="{{ route('quotations.show', $q) }}" class="btn btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                                                <form action="{{ route('quotations.destroy', $q) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this quotation?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -116,7 +116,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
+                                        <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
                                     </td>
                                 </tr>
                                 @empty
@@ -153,7 +153,7 @@
                                     <td class="small">{{ $visit->visitor_name }}</td>
                                     <td class="small">{{ $visit->conductedBy?->name ?? '–' }}</td>
                                     <td>
-                                        <a href="{{ route('site-visits.show', $visit) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
+                                        <a href="{{ route('site-visits.show', $visit) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
                                     </td>
                                 </tr>
                                 @empty

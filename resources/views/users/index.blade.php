@@ -10,7 +10,7 @@
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">
-            <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Role</th><th>Center</th><th>Status</th><th>Last Login</th><th></th></tr></thead>
+            <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Role</th><th>Center</th><th>Status</th><th>Last Login</th><th>Action</th></tr></thead>
             <tbody>
             @forelse($users as $u)
             <tr>
@@ -22,7 +22,14 @@
                 <td>@if($u->is_active)<span class="badge bg-success">Active</span>@else<span class="badge bg-secondary">Inactive</span>@endif</td>
                 <td class="small text-muted">{{ $u->last_login_at?->diffForHumans() ?? 'Never' }}</td>
                 <td>
-                    <a href="{{ route('users.edit', $u) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <div class="d-flex gap-1 justify-content-left">
+                        <a href="{{ route('users.show', $u) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{{ route('users.edit', $u) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <form action="{{ route('users.destroy', $u) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');" class="d-inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty

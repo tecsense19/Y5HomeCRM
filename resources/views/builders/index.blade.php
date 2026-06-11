@@ -58,13 +58,13 @@
                             @endif
                         </td>
                         <td>
-                            <div class="d-flex gap-1">
-                                <a href="{{ route('builders.show', $b) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
-                                <a href="{{ route('builders.edit', $b) }}" class="btn btn-xs btn-outline-secondary btn-sm">Edit</a>
+                            <div class="d-flex gap-1 justify-content-left">
+                                <a href="{{ route('builders.show', $b) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('builders.edit', $b) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
                                 <form action="{{ route('builders.destroy', $b) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this builder?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-xs btn-outline-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
                                 </form>
                             </div>
                         </td>

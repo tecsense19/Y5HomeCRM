@@ -33,11 +33,16 @@ class Lead extends Model
         'next_followup_date',
         'lost_reason',
         'created_by',
+        'locked_from',
+        'locked_until',
+        'locked_by',
     ];
 
     protected $casts = [
         'lead_creation_date'  => 'date',
         'next_followup_date'  => 'date',
+        'locked_from'         => 'datetime',
+        'locked_until'        => 'datetime',
         'estimated_budget'    => 'decimal:2',
     ];
 
@@ -135,6 +140,11 @@ class Lead extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function lockedBy()
+    {
+        return $this->belongsTo(User::class, 'locked_by');
     }
 
     public function siteVisits()

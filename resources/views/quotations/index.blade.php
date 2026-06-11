@@ -10,7 +10,7 @@
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">
-            <thead><tr><th>Quotation #</th><th>Customer</th><th>Date</th><th>Value</th><th>Version</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Quotation #</th><th>Customer</th><th>Date</th><th>Value</th><th>Version</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
             @forelse($quotations as $q)
             <tr>
@@ -23,7 +23,16 @@
                     @php $cls = ['draft'=>'secondary','sent'=>'primary','approved'=>'success','rejected'=>'danger'][$q->status] ?? 'secondary' @endphp
                     <span class="badge bg-{{ $cls }}">{{ ucfirst($q->status) }}</span>
                 </td>
-                <td><a href="{{ route('quotations.show', $q) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                <td>
+                    <div class="d-flex gap-1 justify-content-left">
+                        <a href="{{ route('quotations.show', $q) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{{ route('quotations.edit', $q) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <form action="{{ route('quotations.destroy', $q) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this quotation?');" class="d-inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             @empty
             <tr><td colspan="7" class="text-center text-muted py-4">No quotations.</td></tr>

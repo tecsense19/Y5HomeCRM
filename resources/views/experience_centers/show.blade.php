@@ -147,7 +147,14 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm">View</a>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-xs btn-outline-primary btn-sm" title="View"><i class="bi bi-eye"></i></a>
+                                            <a href="{{ route('leads.edit', $lead) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                                            <form action="{{ route('leads.destroy', $lead) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this lead?');">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -204,22 +211,22 @@
                                              @if(auth()->id() !== $u->id)
                                              <form action="{{ route('users.impersonate', $u) }}" method="POST" class="d-inline">
                                                  @csrf
-                                                 <button type="submit" class="btn btn-xs btn-outline-primary btn-sm d-flex align-items-center gap-1">
-                                                     <i class="bi bi-box-arrow-in-right"></i> Login
+                                                 <button type="submit" class="btn btn-xs btn-outline-primary btn-sm" title="Login">
+                                                     <i class="bi bi-box-arrow-in-right"></i>
                                                  </button>
                                              </form>
                                              @endif
                                              
                                              @if(auth()->user()->isSuperAdmin() || (auth()->user()->isExperienceCenterUser() && auth()->user()->experience_center_id === $experienceCenter->id))
-                                             <a href="{{ route('users.edit', $u) }}" class="btn btn-xs btn-outline-secondary btn-sm">
-                                                 <i class="bi bi-pencil"></i> Edit
+                                             <a href="{{ route('users.edit', $u) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit">
+                                                 <i class="bi bi-pencil"></i>
                                              </a>
                                              
                                              <form action="{{ route('experience-centers.remove-staff', [$experienceCenter, $u]) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this staff user?');">
                                                  @csrf
                                                  @method('DELETE')
-                                                 <button type="submit" class="btn btn-xs btn-outline-danger btn-sm">
-                                                     <i class="bi bi-trash"></i> Delete
+                                                 <button type="submit" class="btn btn-xs btn-outline-danger btn-sm" title="Delete">
+                                                     <i class="bi bi-trash"></i>
                                                  </button>
                                              </form>
                                              @endif

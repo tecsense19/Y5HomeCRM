@@ -23,6 +23,8 @@
                     <option value="">All Categories</option>
                     <option value="site_photos" {{ request('category') === 'site_photos' ? 'selected' : '' }}>Site Photos</option>
                     <option value="quotations" {{ request('category') === 'quotations' ? 'selected' : '' }}>Quotations</option>
+                    <option value="quotation_pdf" {{ request('category') === 'quotation_pdf' ? 'selected' : '' }}>Quotation Pdf</option>
+                    <option value="boq_pdf" {{ request('category') === 'boq_pdf' ? 'selected' : '' }}>Boq Pdf</option>
                     <option value="drawings" {{ request('category') === 'drawings' ? 'selected' : '' }}>Drawings</option>
                     <option value="agreements" {{ request('category') === 'agreements' ? 'selected' : '' }}>Agreements</option>
                 </select>
@@ -79,12 +81,15 @@
                         <td class="small">{{ $doc->uploadedBy?->name ?? 'System' }}</td>
                         <td class="small text-muted">{{ $doc->created_at->format('d M Y, h:i A') }}</td>
                         <td>
-                            <div class="d-flex gap-1">
+                            <div class="d-flex gap-1 justify-content-left">
                                 <a href="{{ route('documents.download', $doc) }}" class="btn btn-xs btn-outline-primary btn-sm" title="Download">
                                     <i class="bi bi-download"></i>
                                 </a>
                                 <a href="{{ route('documents.show', $doc) }}" class="btn btn-xs btn-outline-info btn-sm" title="Details">
                                     <i class="bi bi-info-circle"></i>
+                                </a>
+                                <a href="{{ route('documents.edit', $doc) }}" class="btn btn-xs btn-outline-secondary btn-sm" title="Edit">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="{{ route('documents.destroy', $doc) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this document?');">
                                     @csrf
