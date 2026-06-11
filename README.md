@@ -39,8 +39,8 @@ A centralized CRM system for Y5Home to manage leads, customers, experience cente
 ### Step 1: Clone & Install
 
 ```bash
-git clone <repo-url> y5home-crm
-cd y5home-crm
+git clone <repo-url> Y5HomeCRM
+cd Y5HomeCRM
 composer install
 ```
 
