@@ -318,6 +318,23 @@
         </li>
 
         @if(auth()->user()->isSuperAdmin())
+        <div class="nav-section">Y5Home Connect</div>
+        <li class="nav-item">
+            <a href="{{ route('icons.index') }}" class="nav-link {{ request()->routeIs('icons*') ? 'active' : '' }}">
+                <i class="bi bi-images"></i> Custom Icons
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('locations.index') }}" class="nav-link {{ request()->routeIs('locations*') ? 'active' : '' }}">
+                <i class="bi bi-geo-alt"></i> Locations
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('frame-colors.index') }}" class="nav-link {{ request()->routeIs('frame-colors*') ? 'active' : '' }}">
+                <i class="bi bi-palette"></i> Frame Colors
+            </a>
+        </li>
+
         <div class="nav-section">Admin</div>
         <li class="nav-item">
             <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users*') ? 'active' : '' }}">

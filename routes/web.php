@@ -14,6 +14,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BuilderController;
 use App\Http\Controllers\ArchitectController;
+use App\Http\Controllers\IconController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\FrameColorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +87,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::post('/users/{user}/impersonate', [UserController::class, 'impersonate'])->name('users.impersonate');
     Route::post('/users/stop-impersonate', [UserController::class, 'stopImpersonate'])->name('users.stop-impersonate');
+
+    // Y5Home Connect (Super Admin only)
+    Route::resource('icons', IconController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::patch('/icons/{icon}/status', [IconController::class, 'updateStatus'])->name('icons.status');
+    Route::resource('locations', LocationController::class)->only(['index', 'store', 'destroy']);
+    Route::patch('/locations/{location}/status', [LocationController::class, 'updateStatus'])->name('locations.status');
+    Route::resource('frame-colors', FrameColorController::class)->only(['index', 'store', 'destroy'])->parameters(['frame-colors' => 'frameColor']);
+    Route::patch('/frame-colors/{frameColor}/status', [FrameColorController::class, 'updateStatus'])->name('frame-colors.status');
 
     // Experience Center Staff Management
     Route::post('/experience-centers/{experience_center}/add-staff', [ExperienceCenterController::class, 'addStaff'])->name('experience-centers.add-staff');

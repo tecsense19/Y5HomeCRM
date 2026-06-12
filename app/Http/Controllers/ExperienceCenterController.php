@@ -17,7 +17,7 @@ class ExperienceCenterController extends Controller
         if (Auth::user()->isExperienceCenterUser()) {
             $query->where('id', Auth::user()->experience_center_id);
         }
-        $centers = $query->paginate(15);
+        $centers = $query->latest()->paginate(15);
         return view('experience_centers.index', compact('centers'));
     }
 
@@ -199,6 +199,13 @@ class ExperienceCenterController extends Controller
                 }
                 
                 $data = array_combine($header, $row);
+                
+                // Convert empty strings to null to prevent MySQL strict mode errors
+                foreach ($data as $key => $value) {
+                    if (trim($value) === '') {
+                        $data[$key] = null;
+                    }
+                }
                 
                 // Parse dates if necessary
                 $dateFields = ['agreement_start_date', 'agreement_end_date'];

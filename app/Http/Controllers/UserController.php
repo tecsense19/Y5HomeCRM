@@ -11,7 +11,16 @@ class UserController extends Controller
     public function index()
     {
         abort_unless(auth()->user()->isSuperAdmin() || auth()->user()->isSalesManager(), 403);
-        $users = User::with('experienceCenter')->paginate(20);
+        $search = request('search');
+        $users = User::with('experienceCenter')
+            ->when($search, function($q, $s) {
+                return $q->where('name', 'like', "%$s%")
+                         ->orWhere('email', 'like', "%$s%")
+                         ->orWhere('mobile', 'like', "%$s%");
+            })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
         return view('users.index', compact('users'));
     }
 

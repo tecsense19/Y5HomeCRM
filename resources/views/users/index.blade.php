@@ -4,9 +4,18 @@
 @section('page-title','User Management')
 @section('content')
 <div class="card">
-    <div class="card-header d-flex justify-content-between">
-        All Users
-        <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus"></i> Add User</a>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>All Users</span>
+        <div class="d-flex align-items-center gap-2">
+            <form action="{{ route('users.index') }}" method="GET" class="d-flex m-0" style="width: 250px;">
+                <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Search users..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-sm btn-primary" title="Search"><i class="bi bi-search"></i></button>
+                @if(request('search'))
+                    <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary ms-1" title="Clear"><i class="bi bi-x"></i></a>
+                @endif
+            </form>
+            <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm text-nowrap"><i class="bi bi-plus"></i> Add User</a>
+        </div>
     </div>
     <div class="card-body p-0">
         <table class="table mb-0">

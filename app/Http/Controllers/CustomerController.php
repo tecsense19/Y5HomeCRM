@@ -17,7 +17,7 @@ class CustomerController extends Controller
                                       ->orWhere('mobile_number', 'like', "%$s%")
                                       ->orWhere('email', 'like', "%$s%"));
         }
-        $customers = $query->paginate(20)->withQueryString();
+        $customers = $query->latest()->paginate(20)->withQueryString();
         return view('customers.index', compact('customers'));
     }
 

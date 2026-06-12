@@ -223,6 +223,13 @@ class LeadController extends Controller
                 
                 $data = array_combine($header, $row);
                 
+                // Convert empty strings to null to prevent MySQL strict mode errors
+                foreach ($data as $key => $value) {
+                    if (trim($value) === '') {
+                        $data[$key] = null;
+                    }
+                }
+                
                 // Parse Excel dates like 1/1/2025 into YYYY-MM-DD
                 if (!empty($data['next_followup_date'])) {
                     try {
