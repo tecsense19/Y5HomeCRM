@@ -89,8 +89,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/stop-impersonate', [UserController::class, 'stopImpersonate'])->name('users.stop-impersonate');
 
     // Y5Home Connect (Super Admin only)
-    Route::resource('icons', IconController::class)->only(['index', 'store', 'update', 'destroy']);
-    Route::patch('/icons/{icon}/status', [IconController::class, 'updateStatus'])->name('icons.status');
+    Route::resource('manage-icons', IconController::class)->only(['index', 'store', 'update', 'destroy'])->names('icons')->parameters(['manage-icons' => 'icon']);
+    Route::patch('/manage-icons/{icon}/status', [IconController::class, 'updateStatus'])->name('icons.status');
     Route::resource('locations', LocationController::class)->only(['index', 'store', 'destroy']);
     Route::patch('/locations/{location}/status', [LocationController::class, 'updateStatus'])->name('locations.status');
     Route::resource('frame-colors', FrameColorController::class)->only(['index', 'store', 'destroy'])->parameters(['frame-colors' => 'frameColor']);

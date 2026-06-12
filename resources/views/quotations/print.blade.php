@@ -449,21 +449,36 @@
             <tr>
                 <!-- QUOTATION FROM -->
                 <td class="from-cell">
+                    @php $ec = $quotation->opportunity && $quotation->opportunity->lead ? $quotation->opportunity->lead->experienceCenter : null; @endphp
                     <div class="addr-label">Quotation From</div>
-                    <div class="addr-name">Y5Home Technologies LLP</div>
-                    <div class="addr-row"><span class="ar-key">Address:</span><span>Gujarat, India</span></div>
-                    <div class="addr-row"><span class="ar-key">GSTIN:</span>
-                        @php $ec = $quotation->opportunity && $quotation->opportunity->lead ? $quotation->opportunity->lead->experienceCenter : null; @endphp
-                        <span>{{ $ec && $ec->gst_number ? $ec->gst_number : '24AABFY6942N1ZN' }}</span>
+                    <div class="addr-name">{{ $ec && $ec->company_name ? $ec->company_name : ($ec && $ec->center_name ? $ec->center_name : '-') }}</div>
+                    <div class="addr-row">
+                        <span class="ar-key">Address:</span>
+                        <span>
+                            @if($ec && $ec->address)
+                                {{ $ec->address }}, {{ $ec->city }}, {{ $ec->state }} - {{ $ec->country }}
+                            @elseif($ec && $ec->city)
+                                {{ $ec->city }}, {{ $ec->state }} - {{ $ec->country }}
+                            @else
+                                -
+                            @endif
+                        </span>
                     </div>
-                    <div class="addr-row"><span class="ar-key">PAN:</span><span>AABFY6942N</span></div>
+                    <div class="addr-row"><span class="ar-key">GSTIN:</span>
+                        <span>{{ $ec && $ec->gst_number ? $ec->gst_number : '-' }}</span>
+                    </div>
+                    <div class="addr-row"><span class="ar-key">PAN:</span>
+                        <span>{{ $ec && $ec->pan_number ? $ec->pan_number : '-' }}</span>
+                    </div>
                     <div class="addr-row"><span class="ar-key">Email:</span>
-                        <span>{{ $ec && $ec->email ? $ec->email : 'info@y5home.com' }}</span>
+                        <span>{{ $ec && $ec->email ? $ec->email : '-' }}</span>
                     </div>
                     <div class="addr-row"><span class="ar-key">Phone:</span>
-                        <span>{{ $ec && $ec->mobile_number ? $ec->mobile_number : '+91 82004 93704' }}</span>
+                        <span>{{ $ec && $ec->mobile_number ? $ec->mobile_number : '-' }}</span>
                     </div>
-                    <div class="addr-row"><span class="ar-key">MSME UDYAM NO:</span><span>UDYAM-GJ-09-0031372</span></div>
+                    <div class="addr-row"><span class="ar-key">MSME UDYAM NO:</span>
+                        <span>{{ $ec && $ec->msme_udyam_number ? $ec->msme_udyam_number : '-' }}</span>
+                    </div>
                 </td>
 
                 <!-- QUOTATION FOR -->
@@ -638,8 +653,11 @@
 
     <!-- FOOTER BAR -->
     <div class="footer-bar">
-        <!-- <span>Y5Home Technologies LLP &nbsp;|&nbsp; Smart Home Automation</span> -->
-        <span>For any enquiry, reach out via email at <a href="mailto:info@y5home.in">info@y5home.in</a>, call on. <a href="tel:+918200493704">+91 82004 93704</a>.</span>
+        @php
+            $footerEmail = $ec && $ec->email ? $ec->email : 'info@y5home.in';
+            $footerPhone = $ec && $ec->mobile_number ? $ec->mobile_number : '+91 82004 93704';
+        @endphp
+        <span>For any enquiry, reach out via email at <a href="mailto:{{ $footerEmail }}">{{ $footerEmail }}</a>, call on <a href="tel:{{ $footerPhone }}">{{ $footerPhone }}</a>.</span>
         <span>{{ $quotation->quotation_number }} &nbsp;·&nbsp; {{ $quotation->quotation_date ? $quotation->quotation_date->format('d M Y') : '' }}</span>
     </div>
 

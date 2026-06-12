@@ -35,6 +35,8 @@ class ExperienceCenterController extends Controller
             'owner_name'              => 'required|string|max:255',
             'company_name'            => 'nullable|string',
             'gst_number'              => 'nullable|string|max:20',
+            'pan_number'              => 'nullable|string|max:20',
+            'msme_udyam_number'       => 'nullable|string|max:50',
             'mobile_number'           => 'required|string|max:15',
             'email'                   => 'nullable|email',
             'address'                 => 'nullable|string',
@@ -75,6 +77,8 @@ class ExperienceCenterController extends Controller
             'owner_name'              => 'required|string|max:255',
             'company_name'            => 'nullable|string',
             'gst_number'              => 'nullable|string|max:20',
+            'pan_number'              => 'nullable|string|max:20',
+            'msme_udyam_number'       => 'nullable|string|max:50',
             'mobile_number'           => 'required|string|max:15',
             'email'                   => 'nullable|email',
             'address'                 => 'nullable|string',
@@ -225,6 +229,8 @@ class ExperienceCenterController extends Controller
                     'owner_name'              => 'required|string|max:255',
                     'company_name'            => 'nullable|string',
                     'gst_number'              => 'nullable|string|max:20',
+                    'pan_number'              => 'nullable|string|max:20',
+                    'msme_udyam_number'       => 'nullable|string|max:50',
                     'mobile_number'           => 'required|string|max:15',
                     'email'                   => 'nullable|email',
                     'address'                 => 'nullable|string',
@@ -270,7 +276,7 @@ class ExperienceCenterController extends Controller
     {
         abort_unless(Auth::user()->isSuperAdmin(), 403);
         $headers = [
-            'center_name', 'owner_name', 'company_name', 'gst_number', 'mobile_number',
+            'center_name', 'owner_name', 'company_name', 'gst_number', 'pan_number', 'msme_udyam_number', 'mobile_number',
             'email', 'address', 'city', 'state', 'country',
             'agreement_start_date', 'agreement_end_date', 'security_deposit_amount'
         ];
@@ -279,7 +285,7 @@ class ExperienceCenterController extends Controller
             $file = fopen('php://output', 'w');
             fputcsv($file, $headers);
             // Optional: add a sample row
-            fputcsv($file, ['Elite Center Mumbai', 'John Doe', 'Elite Solutions Pvt Ltd', '27AAAAA1234A1Z5', '9876543210', 'mumbai@elitecenter.com', '123, Business Park', 'Mumbai', 'Maharashtra', 'India', '2025-01-01', '2026-01-01', '500000']);
+            fputcsv($file, ['Elite Center Mumbai', 'John Doe', 'Elite Solutions Pvt Ltd', '27AAAAA1234A1Z5', 'AAAAA1234A', 'UDYAM-MH-12345', '9876543210', 'mumbai@elitecenter.com', '123, Business Park', 'Mumbai', 'Maharashtra', 'India', '2025-01-01', '2026-01-01', '500000']);
             fclose($file);
         };
 

@@ -31,7 +31,7 @@
                     <ul class="mb-0">
                         <li>Only CSV files are supported.</li>
                         <li>Required columns: <code>center_name</code>, <code>owner_name</code>, <code>mobile_number</code>, <code>city</code>, <code>state</code></li>
-                        <li>Optional columns: <code>company_name</code>, <code>gst_number</code>, <code>email</code>, <code>address</code>, <code>country</code>, <code>agreement_start_date</code>, <code>agreement_end_date</code>, <code>security_deposit_amount</code></li>
+                        <li>Optional columns: <code>company_name</code>, <code>gst_number</code>, <code>pan_number</code>, <code>msme_udyam_number</code>, <code>email</code>, <code>address</code>, <code>country</code>, <code>agreement_start_date</code>, <code>agreement_end_date</code>, <code>security_deposit_amount</code></li>
                         <li>Please make sure the column headers match exactly (case-insensitive). Spaces will be converted to underscores.</li>
                     </ul>
                 </div>

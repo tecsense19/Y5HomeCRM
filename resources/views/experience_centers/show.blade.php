@@ -34,6 +34,14 @@
                         <span class="fw-semibold small"><code>{{ $experienceCenter->gst_number ?: '–' }}</code></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="text-muted small">PAN Number</span>
+                        <span class="fw-semibold small"><code>{{ $experienceCenter->pan_number ?: '–' }}</code></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="text-muted small">MSME Udyam</span>
+                        <span class="fw-semibold small"><code>{{ $experienceCenter->msme_udyam_number ?: '–' }}</code></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                         <span class="text-muted small">Mobile</span>
                         <span class="fw-semibold small"><a href="tel:{{ $experienceCenter->mobile_number }}" class="text-decoration-none">{{ $experienceCenter->mobile_number }}</a></span>
                     </li>

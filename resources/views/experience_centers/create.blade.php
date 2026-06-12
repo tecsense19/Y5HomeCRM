@@ -43,9 +43,20 @@
                             <label class="form-label" for="company_name">Company Name</label>
                             <input type="text" name="company_name" id="company_name" class="form-control" value="{{ old('company_name') }}">
                         </div>
-                        <div class="col-md-6 mb-3">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label" for="gst_number">GST Number</label>
                             <input type="text" name="gst_number" id="gst_number" class="form-control" value="{{ old('gst_number') }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="pan_number">PAN Number</label>
+                            <input type="text" name="pan_number" id="pan_number" class="form-control" value="{{ old('pan_number') }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="msme_udyam_number">MSME Udyam Number</label>
+                            <input type="text" name="msme_udyam_number" id="msme_udyam_number" class="form-control" value="{{ old('msme_udyam_number') }}">
                         </div>
                     </div>
 

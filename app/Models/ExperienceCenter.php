@@ -17,6 +17,8 @@ class ExperienceCenter extends Model
         'owner_name',
         'company_name',
         'gst_number',
+        'pan_number',
+        'msme_udyam_number',
         'mobile_number',
         'email',
         'address',
