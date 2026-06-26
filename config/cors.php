@@ -19,7 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // 'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://localhost:8000', 'http://localhost:8080', 'https://y5homecrm.websitedesign4you.com/', 'https://y5homeconnect.websitedesign4you.com/'],
 
     'allowed_origins_patterns' => [],
 
